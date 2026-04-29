@@ -10,9 +10,9 @@ A modern, responsive Tic Tac Toe web app with an unbeatable Minimax AI, glassmor
 
 ## Live Demo
 
-**Play here:** https://<your-username>.github.io/<repo-name>/
+**Play here:** https://aasimansari1.github.io/tic-tac-toe/
 
-> Replace `<your-username>` and `<repo-name>` with yours after enabling GitHub Pages (instructions below).
+Open the link in any modern browser — desktop or mobile. No installation required.
 
 ---
 
@@ -28,8 +28,8 @@ Just open the **Live Demo** link above. The game runs entirely in your browser �
    - Click the green **`Code`** button at the top of the repo → **Download ZIP** → extract it.
    - *Or* clone with git:
      ```bash
-     git clone https://github.com/<your-username>/<repo-name>.git
-     cd <repo-name>
+     git clone https://github.com/aasimansari1/tic-tac-toe.git
+     cd tic-tac-toe
      ```
 
 2. **Open the game:**
