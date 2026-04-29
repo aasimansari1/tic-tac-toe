@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe — AI Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- Animated background blobs -->
+    <div class="bg-blobs" aria-hidden="true">
+        <span class="blob blob-1"></span>
+        <span class="blob blob-2"></span>
+        <span class="blob blob-3"></span>
+    </div>
+
+    <!-- Theme toggle -->
+    <button id="themeToggle" class="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">☾</span>
+    </button>
+
+    <main class="app">
+        <header class="app-header">
+            <h1 class="title">Tic <span class="accent">Tac</span> Toe</h1>
+            <p class="subtitle">Modern AI Edition · Minimax Powered</p>
+        </header>
+
+        <!-- Setup screen -->
+        <section id="setupScreen" class="card setup">
+            <h2 class="card-title">Game Setup</h2>
+
+            <div class="field-group">
+                <label class="field-label">Mode</label>
+                <div class="segmented" role="tablist" aria-label="Game mode">
+                    <button class="seg-btn active" data-mode="pvai" role="tab" aria-selected="true">Player vs AI</button>
+                    <button class="seg-btn" data-mode="pvp" role="tab" aria-selected="false">Player vs Player</button>
+                </div>
+            </div>
+
+            <div class="field-group" id="difficultyGroup">
+                <label class="field-label">Difficulty</label>
+                <div class="segmented" role="tablist" aria-label="Difficulty">
+                    <button class="seg-btn" data-diff="easy" role="tab">Easy</button>
+                    <button class="seg-btn" data-diff="medium" role="tab">Medium</button>
+                    <button class="seg-btn active" data-diff="hard" role="tab" aria-selected="true">Hard</button>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="player1Name">Player 1 (X)</label>
+                <input id="player1Name" class="text-input" type="text" maxlength="14" placeholder="Player 1" value="Player 1" />
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="player2Name" id="player2Label">Computer (O)</label>
+                <input id="player2Name" class="text-input" type="text" maxlength="14" placeholder="Computer" value="Computer" />
+            </div>
+
+            <button id="startBtn" class="btn btn-primary btn-block">Start Game</button>
+        </section>
+
+        <!-- Game screen -->
+        <section id="gameScreen" class="card game hidden">
+            <!-- Scoreboard -->
+            <div class="scoreboard">
+                <div class="score score-x" id="scoreCardX">
+                    <span class="score-mark">X</span>
+                    <span class="score-name" id="nameX">Player 1</span>
+                    <span class="score-value" id="scoreX">0</span>
+                </div>
+                <div class="score score-draw">
+                    <span class="score-mark">∼</span>
+                    <span class="score-name">Draws</span>
+                    <span class="score-value" id="scoreD">0</span>
+                </div>
+                <div class="score score-o" id="scoreCardO">
+                    <span class="score-mark">O</span>
+                    <span class="score-name" id="nameO">Computer</span>
+                    <span class="score-value" id="scoreO">0</span>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div class="status" id="status">
+                <span class="turn-dot"></span>
+                <span id="statusText">Player 1's turn</span>
+            </div>
+
+            <!-- Board -->
+            <div class="board-wrapper">
+                <div class="board" id="board" role="grid" aria-label="Tic Tac Toe board">
+                    <button class="cell" data-i="0" role="gridcell" aria-label="Cell 1"></button>
+                    <button class="cell" data-i="1" role="gridcell" aria-label="Cell 2"></button>
+                    <button class="cell" data-i="2" role="gridcell" aria-label="Cell 3"></button>
+                    <button class="cell" data-i="3" role="gridcell" aria-label="Cell 4"></button>
+                    <button class="cell" data-i="4" role="gridcell" aria-label="Cell 5"></button>
+                    <button class="cell" data-i="5" role="gridcell" aria-label="Cell 6"></button>
+                    <button class="cell" data-i="6" role="gridcell" aria-label="Cell 7"></button>
+                    <button class="cell" data-i="7" role="gridcell" aria-label="Cell 8"></button>
+                    <button class="cell" data-i="8" role="gridcell" aria-label="Cell 9"></button>
+                    <svg class="win-line" id="winLine" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                        <line x1="0" y1="0" x2="0" y2="0" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button id="restartBtn" class="btn btn-secondary">Restart Round</button>
+                <button id="resetScoreBtn" class="btn btn-ghost">Reset Score</button>
+                <button id="newGameBtn" class="btn btn-ghost">New Setup</button>
+            </div>
+
+            <!-- Match History -->
+            <div class="history">
+                <div class="history-head">
+                    <h3>Match History</h3>
+                    <button id="clearHistoryBtn" class="link-btn">Clear</button>
+                </div>
+                <ul id="historyList" class="history-list">
+                    <li class="history-empty">No matches yet — make your move.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Result Modal -->
+        <div id="resultModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+            <div class="modal-card">
+                <div class="modal-emoji" id="resultEmoji">🎉</div>
+                <h2 class="modal-title" id="resultTitle">You Win!</h2>
+                <p class="modal-sub" id="resultSub">Great move.</p>
+                <div class="modal-actions">
+                    <button id="modalPlayAgain" class="btn btn-primary">Play Again</button>
+                    <button id="modalClose" class="btn btn-ghost">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <span>Built with HTML · CSS · JavaScript</span>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
